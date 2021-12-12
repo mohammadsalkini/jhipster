@@ -29,19 +29,19 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "pom.xml" }}
+            - v1-dependencies-{{ checksum "build.gradle" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: sudo ./mvnw -Dmaven.test.skip=true package
+      - run: gradle dependencies
 
       - save_cache:
           paths:
             - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
+          key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests and package
-      - run: sudo ./mvnw clean test
+      - run: ./gradlew clean test
 
       - run:
           name: Save test results
@@ -62,4 +62,4 @@ jobs:
 
       - run:
           name: Build Docker Image
-          command: sudo ./mvnw bootRepackage -Pprod pushDockerLatest pushDockerVersionTag -x test
+          command: ./gradlew bootRepackage -Pprod pushDockerLatest pushDockerVersionTag -x test
