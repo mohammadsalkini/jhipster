@@ -33,7 +33,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: ./mvnw -Dmaven.test.skip=true package
+      - run: sudo ./mvnw -Dmaven.test.skip=true package
 
       - save_cache:
           paths:
@@ -41,7 +41,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests and package
-      - run: ./mvnw clean test
+      - run: sudo ./mvnw clean test
 
       - run:
           name: Save test results
@@ -62,4 +62,4 @@ jobs:
 
       - run:
           name: Build Docker Image
-          command: ./mvnw bootRepackage -Pprod pushDockerLatest pushDockerVersionTag -x test
+          command: sudo ./mvnw bootRepackage -Pprod pushDockerLatest pushDockerVersionTag -x test
